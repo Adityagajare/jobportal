@@ -8,18 +8,12 @@ import { Modal, Button, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import CreateJob from './JobCreate';
+import { useSelector } from 'react-redux';
+import { selectAllJobs } from '~/selectors';
+import { useDispatch } from 'react-redux';
+import { getAllJobs, deleteJob } from '../store/actions';
 
-// type JobDetails = {
-//   id: string;
-//   title: string;
-//   description: string;
-//   salary: string;
-//   location: string;
-//   skills: string;
-//   category: string;
-//   dateOfPost: string;
-//   lastDate: string;
-// };
+
 
 type Location = {
   city: string;
@@ -50,7 +44,7 @@ type JobDetails = {
 };
 
 const ViewJob: React.FC = () => {
-  const [rowData, setRowData] = useState<JobDetails[]>([]);
+  // const [rowData, setRowData] = useState<JobDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -59,24 +53,28 @@ const ViewJob: React.FC = () => {
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [alertVariant, setAlertVariant] = useState<'success' | 'danger' | ''>('');
 
+
+  const rowData = useSelector(selectAllJobs).data;
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    const fetchData = async () => {
+            try {
+              await dispatch(getAllJobs());
+            } catch (error) {
+              setAlertMessage('Failed to load job details. Please try again.');
+              setAlertVariant('danger');
+            } finally {
+              setLoading(false);
+            }
+          };
+      
+          fetchData();
+  },[dispatch])
+
   const navigate = useNavigate();
 
-  const fetchJobs = async (): Promise<JobDetails[]> => {
-    try {
-      const response = await fetch('http://localhost:5000/api/admin/jobdetails');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      return data.jobs;
-      console.log(data.jobs, 'lklklklklk');
-    } catch (error) {
-      console.error('Error fetching job details:', error);
-      throw error;
-    }
-  };
-
-  const deleteJob = async (jobId: string) => {
+  const deletingJob = async (jobId: string) => {
     try {
       const response = await fetch(`http://localhost:5000/api/admin/jobdelete/${jobId}`, {
         method: 'DELETE',
@@ -90,22 +88,6 @@ const ViewJob: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const jobs = await fetchJobs();
-        setRowData(jobs);
-        console.log(jobs, 'ladskasldkasd');
-      } catch {
-        setAlertMessage('Failed to load job details. Please try again.');
-        setAlertVariant('danger');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, []);
 
   const handleEdit = (id: string) => {
     setSelectedJobId(id);
@@ -127,8 +109,9 @@ const ViewJob: React.FC = () => {
   const confirmDelete = async () => {
     if (selectedJobId) {
       try {
-        await deleteJob(selectedJobId);
-        setRowData(prevData => prevData.filter(job => job.id !== selectedJobId));
+        await deletingJob(selectedJobId);
+        // setRowData(prevData => prevData.filter(job => job.id !== selectedJobId));
+        await dispatch(deleteJob(selectedJobId))
         setAlertMessage('Job deleted successfully!');
         setAlertVariant('success');
       } catch {

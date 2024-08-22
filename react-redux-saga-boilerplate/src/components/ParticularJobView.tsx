@@ -142,11 +142,7 @@ const ParticularJobView: React.FC<ParticularJobViewProps> = ({ userId, user_role
             </p>
             <p className="card-text">
               <strong>Skills:</strong>
-              <ul>
-                {job.skills.map(skill => (
-                  <li key={skill.id}>{skill.skill}</li>
-                ))}
-              </ul>
+              {job.skills.map(skill => skill.skill).join(', ')}
             </p>
             <button
               className={`btn ${applied ? 'btn-success' : 'btn-primary'}`}

@@ -46,8 +46,17 @@ export interface RootState {
   app: AppState;
   github: GitHubState;
   user: UserState;
+  allJobs: Job;
 }
 
 export interface WithDispatch {
   dispatch: Dispatch;
 }
+
+export interface Job {
+  error: string;
+  data: any[];
+  // loading: boolean;
+  loading: string;
+  id?: string;
+};
