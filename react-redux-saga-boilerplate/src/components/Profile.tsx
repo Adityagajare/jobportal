@@ -15,9 +15,9 @@ interface UserProfile {
   education: string;
   skills: string[];
   description: string;
-  // yop:string;
-  // college:string;
-  // percentage:string;
+  yop:string;
+  college:string;
+  percentage:string;
 }
 
 interface ProfileProps {
@@ -40,9 +40,9 @@ const Profile: React.FC<ProfileProps> = ({ role }) => {
     education: '',
     skills: [],
     description: '',
-    // college: '',
-    // yop:'',
-    // percentage:''
+    college: '',
+    yop:'',
+    percentage:''
   });
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -121,9 +121,9 @@ const Profile: React.FC<ProfileProps> = ({ role }) => {
         education: '',
         skills: [],
         description: '',
-        // yop:'',
-        // college:'',
-        // percentage:''
+        yop:'',
+        college:'',
+        percentage:''
       }));
     }
     setError(null);
@@ -308,7 +308,7 @@ const Profile: React.FC<ProfileProps> = ({ role }) => {
             </Col>
           </Form.Group>
 
-          {/* <Form.Group as={Row} controlId="formCollege">
+          <Form.Group as={Row} controlId="formCollege">
             <Form.Label column sm={3}>
               College Name
             </Form.Label>
@@ -357,7 +357,7 @@ const Profile: React.FC<ProfileProps> = ({ role }) => {
               readOnly={!isEditing}
               />
             </Col>
-          </Form.Group> */}
+          </Form.Group>
 
           <Form.Group as={Row} controlId="formSkills">
             <Form.Label column sm={3}>

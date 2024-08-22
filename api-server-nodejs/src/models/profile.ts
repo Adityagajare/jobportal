@@ -35,14 +35,14 @@ export class Profile {
   @Column("text", { nullable: true })
   description?: string;
 
-  // @Column("text", { nullable: true })
-  // college?: string;
+  @Column("text", { nullable: true })
+  college?: string;
 
-  // @Column("text", {nullable: true})
-  // yop?: string;
+  @Column("text", {nullable: true})
+  yop?: string;
 
-  // @Column("text", {nullable:true})
-  // percentage?: string;
+  @Column("text", {nullable:true})
+  percentage?: string;
 
   // @Column({ nullable: true })
   // resumePath?: string; // New column for storing resume path
